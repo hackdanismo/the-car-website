@@ -53,3 +53,18 @@ $ npm run dev
 The application will be available to view locally here: `http://localhost:4321/`.
 
 <img width="1617" height="891" alt="The initial screen showing the Astro application once installed." src="https://github.com/user-attachments/assets/d1915aa2-ad81-4397-96d3-d4ea9f7b18dd" />
+
+## Content Management
+We are using [Sanity](https://www.sanity.io/) as the `Content Management` platform to manage content across the application. 
+
+The usual setup is: `Astro` handles the frontend, `Sanity` is the CMS, and Astro `pages/` components fetch content from Sanity using Sanity's JavaScript client.
+
+Begin by creating an account, if this has not already been done. Once logged in, a project needs to be created. This can be done on this page: [https://www.sanity.io/manage](https://www.sanity.io/manage).
+
+The `Sanity` project will be called: `the-car-website`.
+
+Install the `@sanity/client` `npm` package:
+
+```shell
+$ npm install @sanity/client
+```
