@@ -77,6 +77,7 @@ const title = "About";
 
     <a href="/">Back to home</a>
 </body>
+</html>
 ```
 
 Links between pages uses a normal hyperlink:
