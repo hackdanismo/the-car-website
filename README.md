@@ -115,3 +115,97 @@ export const sanity = createClient({
 ```
 
 Replace `YOUR_PROJECT_ID` with the ID of the Sanity project.
+
+### Sanity Studio
+`Sanity Studio` is the the user interface dashboard for the `Sanity CMS`. Think of it as the admin area where we can create and manage content. The `Astro` app is the public-facing website; `Sanity Studio` is where the content gets entered and edited.
+
+Since we already have both the `Astro` app and the `Sanity` project, the cleanest setup is to embed `Sanity Studio` at a route such as `/studio` inside of the project folder containing `Astro`. Sanity's official Astro integration supports this directly.
+
+`@astrojs/react` is needed when embedding `Studio` in `Astro`.
+
+From the root of the `Astro` project, install the integration:
+
+```shell
+$ npx astro add @sanity/astro @astrojs/react
+```
+
+Once installed, the `astro.config.mjs` file should look like this:
+
+```mjs
+// @ts-check
+import { defineConfig } from 'astro/config';
+import sanity from '@sanity/astro';
+import react from '@astrojs/react';
+
+// https://astro.build/config
+export default defineConfig({
+    integrations: [
+        sanity({
+            projectId: "YOUR_PROJECT_ID",
+            dataset: "production",
+            useCdn: false,
+            studioBasePath: "/studio",
+        }), 
+        react()
+    ],
+});
+```
+Replace `YOUR_PROJECT_ID` with the `Sanity project ID`.
+
+Then create a `sanity.config.ts` file in the project root:
+
+```typescript
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
+
+export default defineConfig({
+    name: "default",
+    title: "The Car Website",
+    projectId: "YOUR_PROJECT_ID",
+    dataset: "production",
+    plugins: [structureTool()],
+    schema: {
+        types: [],
+    },
+});
+```
+
+Replace `YOUR_PROJECT_ID` with the `Sanity project ID`.
+
+The important part for the `Studio` is:
+
+```typescript
+studioBasePath: "/studio"
+```
+
+This tells `Astro` to serve `Sanity Studio` from: `http://localhost:4321/studio`.
+
+We should also add the `Sanity` module types to a `src/env.d.ts` file as `Sanity` specifically documents this because the `Astro` integration exposes its client through a virtual module:
+
+```typescript
+/// <reference types="astro/client" />
+/// <reference types="@sanity/astro/module" />
+```
+
+Now, run:
+
+```shell
+$ npm run dev
+```
+
+And visit: `http://localhost:4321/studio` to open the `Studio`.
+
+### Setting CORS
+Because `Studio` is now running inside of the `Astro` project, the `Astro` origin needs to be added to the project's `CORS Origins` in `Sanity`.
+
+Go to: `Sanity` -> `the-car-website` -> `Settings` -> `API settings` -> `CORS Origins`
+
+During development, add:
+
+```
+http://localhost:4321
+```
+
+And enable `Allow credentials`. `Sanity` requires this for authenticated `Studio` requests.
+
+Once this is done, we can now login to `Studio` with our `Gmail`, `GitHub` or `Email` credentials.
