@@ -286,3 +286,4 @@ We should then see `Article` appear as a document type in `Sanity Studio`.
 
 One distinction worth keeping clear: the existing `src/lib/sanity.ts` is typically for the `Astro` frontend to query `Sanity`, whereas `schemaTypes/` is for defining what editors can create inside `Sanity Studio`.
 
+<img width="1617" height="875" alt="The article schema showing as a document type in Sanity Studio." src="https://github.com/user-attachments/assets/a6beb70e-47fc-400f-a2b4-32569069af9c" />
