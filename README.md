@@ -1,5 +1,14 @@
 # The Car Website
 
+## Run the Application
+To run the application locally, use:
+
+```shell
+$ npm run dev
+```
+
+This will run the application on localhost here: `http://localhost:4321/`.
+
 ## Developer Setup
 
 ### Set the Node version
@@ -42,3 +51,5 @@ $ npm run dev
 ```
 
 The application will be available to view locally here: `http://localhost:4321/`.
+
+<img width="1617" height="891" alt="The initial screen showing the Astro application once installed." src="https://github.com/user-attachments/assets/d1915aa2-ad81-4397-96d3-d4ea9f7b18dd" />
