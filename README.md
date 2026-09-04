@@ -214,4 +214,76 @@ And enable `Allow credentials`. `Sanity` requires this for authenticated `Studio
 
 Once this is done, we can now login to `Studio` with our `Gmail`, `GitHub` or `Email` credentials.
 
+<<<<<<< HEAD
 <img width="1615" height="868" alt="Login to the Sanity Studio using login credentials." src="https://github.com/user-attachments/assets/bbde3dce-3284-49b8-91ac-ef96cd822f76" />
+=======
+## Create the Schema
+The `schema` is the structure for the data in the `CMS`. Within the project, create a `schemaTypes/` folder in the root of the project. Each schema will have the file type of `TypeScript` so will be `.ts` file e.g. `article.ts`.
+
+```typescript
+import { defineField, defineType } from "sanity";
+
+export const articleType = defineType({
+    name: "article",
+    title: "Article",
+    type: "document",
+
+    fields: [
+        defineField({
+            name: "title",
+            title: "Title",
+            type: "string",
+        }),
+        defineField({
+            name: "slug",
+            title: "Slug",
+            type: "slug",
+            options: {
+                source: "title",
+            },
+        }),
+    ],
+});
+```
+
+We also need a `schemaTypes/index.ts` file to list each schema:
+
+```typescript
+import { articleType } from "./article";
+
+export const schemaTypes = [
+    articleType,
+];
+```
+
+Then, update the `sanity.config.ts` file to include the `schemaTypes`:
+
+```typescript
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
+import { schemaTypes } from "./schemaTypes";
+
+export default defineConfig({
+    name: "default",
+    title: "The Car Website",
+    projectId: "YOUR_PROJECT_ID",
+    dataset: "production",
+    plugins: [structureTool()],
+    schema: {
+        types: schemaTypes,
+    },
+});
+```
+
+After that, restart:
+
+```shell
+$ npm run dev
+```
+
+And open: `http://localhost:4321/studio`
+
+We should then see `Article` appear as a document type in `Sanity Studio`.
+
+One distinction worth keeping clear: the existing `src/lib/sanity.ts` is typically for the `Astro` frontend to query `Sanity`, whereas `schemaTypes/` is for defining what editors can create inside `Sanity Studio`.
+>>>>>>> 89a0a32 (feat: setup the initial schema for articles to be added in the Sanity CMS)
