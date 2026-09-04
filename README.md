@@ -28,3 +28,17 @@ dist/
 .env
 .env.*
 ```
+
+### Install Astro
+We are using `Astro` as the frontend framework for this project. To install and setup `Astro`, use the following terminal commands:
+
+```shell
+# Install and setup Astro
+$ npm create astro@latest .
+# Install dependencies and devDependency packages. Generates the node_modules folder
+$ npm install
+# Run the application on the local development server
+$ npm run dev
+```
+
+The application will be available to view locally here: `http://localhost:4321/`.
