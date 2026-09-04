@@ -54,6 +54,37 @@ The application will be available to view locally here: `http://localhost:4321/`
 
 <img width="1617" height="891" alt="The initial screen showing the Astro application once installed." src="https://github.com/user-attachments/assets/d1915aa2-ad81-4397-96d3-d4ea9f7b18dd" />
 
+## Adding Pages
+`Astro` uses file-based routing. To add a new page, create a new `.astro` file inside of `src/pages`. For example, if the page was named `about.astro`, then this page becomes available at: 
+
+```
+/about
+```
+
+Example `about.astro` page:
+
+```astro
+---
+const title = "About";
+---
+
+<html lang="en">
+<head>
+    <title>{title}</title>
+</head>
+<body>
+    <h1>About</h1>
+
+    <a href="/">Back to home</a>
+</body>
+```
+
+Links between pages uses a normal hyperlink:
+
+```html
+<a href="/about">About</a>
+```
+
 ## Content Management
 We are using [Sanity](https://www.sanity.io/) as the `Content Management` platform to manage content across the application. 
 
@@ -68,3 +99,18 @@ Install the `@sanity/client` `npm` package:
 ```shell
 $ npm install @sanity/client
 ```
+
+Within the `Astro` framework, add a file here: `src/lib/sanity.ts` with the following code:
+
+```typescript
+import { createClient } from "@sanity/client";
+
+export const sanity = createClient({
+    projectId: "YOUR_PROJECT_ID",
+    dataset: "production",
+    apiVersion: "2026-09-04",
+    useCdn: true,
+});
+```
+
+Replace `YOUR_PROJECT_ID` with the ID of the Sanity project.
