@@ -93,7 +93,11 @@ The usual setup is: `Astro` handles the frontend, `Sanity` is the CMS, and Astro
 
 Begin by creating an account, if this has not already been done. Once logged in, a project needs to be created. This can be done on this page: [https://www.sanity.io/manage](https://www.sanity.io/manage).
 
+<img width="1574" height="824" alt="The dashboard in Sanity to create a new project." src="https://github.com/user-attachments/assets/beb05881-e552-4300-8063-8a1747523887" />
+
 The `Sanity` project will be called: `the-car-website`.
+
+<img width="1617" height="819" alt="Creating a new project in Sanity." src="https://github.com/user-attachments/assets/f2d1d6c0-46f1-4d96-8f98-98bc64c427a4" />
 
 Install the `@sanity/client` `npm` package:
 
@@ -209,3 +213,5 @@ http://localhost:4321
 And enable `Allow credentials`. `Sanity` requires this for authenticated `Studio` requests.
 
 Once this is done, we can now login to `Studio` with our `Gmail`, `GitHub` or `Email` credentials.
+
+<img width="1615" height="868" alt="Login to the Sanity Studio using login credentials." src="https://github.com/user-attachments/assets/bbde3dce-3284-49b8-91ac-ef96cd822f76" />
