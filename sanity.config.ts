@@ -5,8 +5,8 @@ import { schemaTypes } from "./schemaTypes";
 export default defineConfig({
     name: "default",
     title: "The Car Website",
-    projectId: "gzwu6ixu",
-    dataset: "production",
+    projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+    dataset: process.env.SANITY_STUDIO_DATASET!,
     plugins: [structureTool()],
     schema: {
         types: schemaTypes,

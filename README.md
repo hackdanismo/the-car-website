@@ -293,3 +293,63 @@ Adding a new `article` to the `CMS`:
 <img width="1617" height="878" alt="Fields showing when the article document type is being used." src="https://github.com/user-attachments/assets/0ce2a417-0f72-4484-be33-17c4d6c06290" />
 
 Click the `Publish` button to publish the article and add this to the website.
+
+## Add Environment Variables
+In the root of the project, add the `.env` file containing the environment variables:
+
+```
+# Astro
+PUBLIC_SANITY_PROJECT_ID=xxxxxxx
+PUBLIC_SANITY_DATASET=production
+
+# Sanity Studio
+SANITY_STUDIO_PROJECT_ID=xxxxxxx
+SANITY_STUDIO_DATASET=production
+```
+
+Update the `sanity.config.ts` file:
+
+```typescript
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
+import { schemaTypes } from "./schemaTypes";
+
+export default defineConfig({
+    name: "default",
+    title: "The Car Website",
+    projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+    dataset: process.env.SANITY_STUDIO_DATASET!,
+    plugins: [structureTool()],
+    schema: {
+        types: schemaTypes,
+    },
+});
+```
+
+Update the `astro.config.mjs` file:
+
+```
+// @ts-check
+import { defineConfig } from 'astro/config';
+import { loadEnv } from "vite";
+import sanity from '@sanity/astro';
+import react from '@astrojs/react';
+
+const {
+    PUBLIC_SANITY_PROJECT_ID,
+    PUBLIC_SANITY_DATASET,
+} = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
+
+// https://astro.build/config
+export default defineConfig({
+    integrations: [
+        sanity({
+            projectId: PUBLIC_SANITY_PROJECT_ID,
+            dataset: PUBLIC_SANITY_DATASET,
+            useCdn: false,
+            studioBasePath: "/studio",
+        }), 
+        react()
+    ],
+});
+```
