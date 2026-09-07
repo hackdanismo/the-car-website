@@ -328,7 +328,7 @@ export default defineConfig({
 
 Update the `astro.config.mjs` file:
 
-```
+```mjs
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { loadEnv } from "vite";
@@ -350,6 +350,128 @@ export default defineConfig({
             studioBasePath: "/studio",
         }), 
         react()
+    ],
+});
+```
+
+## Create the Articles page
+Create an `articles` page that will display all articles that have been added to the `Sanity CMS`. Begin by creating a `.astro` file here: `src/pages/articles/index.astro`. Then use:
+
+```astro
+---
+import { sanityClient } from "sanity:client";
+
+const articles = await sanityClient.fetch(`
+    // Get every Sanity document whos type is "article" and show the newest article first
+    *[_type == "article"] | order(_createdAt desc) {
+        _id,
+        title,
+        "slug": slug.current
+    }
+`);
+---
+
+<html lang="en">
+    <head>
+        <title>Articles</title>
+    </head>
+    <body>
+        <main>
+            <h1>Articles</h1>
+
+            {
+                articles.length > 0 ? (
+                    <ul>
+                        {articles.map((article) => (
+                            <li>
+                                <a href={`/articles/${article.slug}`}>
+                                    {article.title}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No articles have been added yet.</p>
+                )
+            }
+        </main>
+    </body>
+</html>
+```
+
+To have each article have its own page, we create the `src/pages/articles/[slug].astro`. So clicking an article opens its own page.
+
+The code for this page would look like this:
+
+```typescript
+---
+import { sanityClient } from "sanity:client";
+
+export async function getStaticPaths() {
+    const articles = await sanityClient.fetch(`
+        *[_type == "article" && defined(slug.current)] {
+            title,
+            "slug": slug.current
+        }
+    `);
+
+    return articles.map((article) => ({
+        params: {
+            slug: article.slug,
+        },
+        props: {
+            article,
+        },
+    }));
+}
+
+const { article } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <title>{article.title}</title>
+    </head>
+    <body>
+        <main>
+            <a href="/articles">Back to articles</a>
+
+            <article>
+                <h1>{article.title}</h1>
+
+                <p>Article content here</p>
+            </article>
+        </main>
+    </body>
+</html>
+```
+
+We will adjust the `schemaTypes/article.ts` code to ensure that all articles should have a `slug` and `title` required.
+
+```typescript
+import { defineField, defineType } from "sanity";
+
+export const articleType = defineType({
+    name: "article",
+    title: "Article",
+    type: "document",
+
+    fields: [
+        defineField({
+            name: "title",
+            title: "Title",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+            name: "slug",
+            title: "Slug",
+            type: "slug",
+            options: {
+                source: "title",
+            },
+            validation: (Rule) => Rule.required(),
+        }),
     ],
 });
 ```

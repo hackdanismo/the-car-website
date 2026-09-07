@@ -10,6 +10,7 @@ export const articleType = defineType({
             name: "title",
             title: "Title",
             type: "string",
+            validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: "slug",
@@ -18,6 +19,7 @@ export const articleType = defineType({
             options: {
                 source: "title",
             },
+            validation: (Rule) => Rule.required(),
         }),
     ],
 });

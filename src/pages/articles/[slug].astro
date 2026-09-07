@@ -1,0 +1,40 @@
+---
+import { sanityClient } from "sanity:client";
+
+export async function getStaticPaths() {
+    const articles = await sanityClient.fetch(`
+        *[_type == "article" && defined(slug.current)] {
+            title,
+            "slug": slug.current
+        }
+    `);
+
+    return articles.map((article) => ({
+        params: {
+            slug: article.slug,
+        },
+        props: {
+            article,
+        },
+    }));
+}
+
+const { article } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <title>{article.title}</title>
+    </head>
+    <body>
+        <main>
+            <a href="/articles">Back to articles</a>
+
+            <article>
+                <h1>{article.title}</h1>
+
+                <p>Article content here</p>
+            </article>
+        </main>
+    </body>
+</html>
