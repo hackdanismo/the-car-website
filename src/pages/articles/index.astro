@@ -1,6 +1,8 @@
 ---
 import { sanityClient } from "sanity:client";
 
+import BaseLayout from "./../../layouts/BaseLayout.astro";
+
 const articles = await sanityClient.fetch(`
     *[_type == "article"] | order(_createdAt desc) {
         _id,
@@ -10,29 +12,22 @@ const articles = await sanityClient.fetch(`
 `);
 ---
 
-<html lang="en">
-    <head>
-        <title>Articles</title>
-    </head>
-    <body>
-        <main>
-            <h1>Articles</h1>
+<BaseLayout title="Articles">
+    <h1>Articles</h1>
 
-            {
-                articles.length > 0 ? (
-                    <ul>
-                        {articles.map((article) => (
-                            <li>
-                                <a href={`/articles/${article.slug}`}>
-                                    {article.title}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No articles have been added yet.</p>
-                )
-            }
-        </main>
-    </body>
-</html>
+    {
+        articles.length > 0 ? (
+            <ul>
+                {articles.map((article) => (
+                    <li>
+                        <a href={`/articles/${article.slug}`}>
+                            {article.title}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>No articles have been added yet.</p>
+        )
+    }
+</BaseLayout>
