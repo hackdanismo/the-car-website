@@ -1,0 +1,35 @@
+---
+import { sanityClient } from "sanity:client";
+
+import BaseLayout from "./../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const news = await sanityClient.fetch(`
+        *[_type == "news" && defined(slug.current)] {
+            title,
+            "slug": slug.current
+        }
+    `);
+
+    return news.map((news) => ({
+        params: {
+            slug: news.slug,
+        },
+        props: {
+            news,
+        },
+    }));
+}
+
+const { news } = Astro.props;
+---
+
+<BaseLayout title={news.title}>
+    <a href="/news">Back to Latest News</a>
+
+    <article>
+        <h1>{news.title}</h1>
+
+        <p>News content here</p>
+    </article>
+</BaseLayout>

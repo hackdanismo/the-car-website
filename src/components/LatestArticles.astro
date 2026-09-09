@@ -1,0 +1,35 @@
+---
+import { sanityClient } from "sanity:client";
+
+const articles = await sanityClient.fetch(`
+    *[_type == "article" && defined(slug.current)]
+    // Sort the newest articles first and returns only the first three
+    | order(_createdAt desc)[0...3] {
+        _id,
+        title,
+        "slug": slug.current
+    }
+`);
+---
+
+<section>
+    <h2>Articles</h2>
+
+    {
+        articles.length > 0 ? (
+            <ul>
+                {articles.map((article) => (
+                    <li>
+                        <a href={`/articles/${article.slug}`}>
+                            {article.title}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+
+            <a href="/articles">Read all articles</a>
+        ) : (
+            <p>No articles have been added yet.</p>
+        )
+    }
+</section>

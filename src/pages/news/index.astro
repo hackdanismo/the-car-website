@@ -1,0 +1,33 @@
+---
+import { sanityClient } from "sanity:client";
+
+import BaseLayout from "./../../layouts/BaseLayout.astro";
+
+const news = await sanityClient.fetch(`
+    *[_type == "news"] | order(_createdAt desc) {
+        _id,
+        title,
+        "slug": slug.current
+    }
+`);
+---
+
+<BaseLayout title="Latest News">
+    <h1>Latest News</h1>
+
+    {
+        news.length > 0 ? (
+            <ul>
+                {news.map((news) => (
+                    <li>
+                        <a href={`/news/${news.slug}`}>
+                            {news.title}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>No news stories have been added yet.</p>
+        )
+    }
+</BaseLayout>
