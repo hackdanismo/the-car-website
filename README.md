@@ -475,3 +475,94 @@ export const articleType = defineType({
     ],
 });
 ```
+
+## Layout
+In order to create a layout for the pages, so we can add shared components such as a Header and a Footer, begin by adding a file named `BaseLayout.astro` into the `layouts/` directory. We currently already have the initial `layout/Layout.astro` file from when the `Astro` application was created.
+
+The `layout/BaseLayout.astro` file looks like this:
+
+```astro
+---
+import Footer from "./../components/Footer.astro";
+
+const { title = "The Car Website" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+
+        <title>{title}</title>
+    </head>
+    <body>
+        <main>
+            <slot />
+        </main>
+
+        <Footer />
+    </body>
+</html>
+```
+
+The `<slot />` component is where the content is rendered. You will also notice that we have a `Footer` component in `components/Footer.astro` that we are importing. This is the basic shared page footer.
+
+```astro
+<footer>
+    <p>&copy; 2026 The Car Website</p>
+</footer>
+```
+
+Within a page, we need to import the layout into the page:
+
+```astro
+import BaseLayout from "./../../layouts/BaseLayout.astro";
+```
+
+We then wrap the layout element around the page content to apply the page layout structure. For example, this is the `pages/index.astro` homepage:
+
+```astro
+---
+import { sanityClient } from "sanity:client";
+
+import BaseLayout from "./../../layouts/BaseLayout.astro";
+
+const articles = await sanityClient.fetch(`
+    *[_type == "article"] | order(_createdAt desc) {
+        _id,
+        title,
+        "slug": slug.current
+    }
+`);
+---
+
+<BaseLayout title="Articles">
+    <h1>Articles</h1>
+
+    {
+        articles.length > 0 ? (
+            <ul>
+                {articles.map((article) => (
+                    <li>
+                        <a href={`/articles/${article.slug}`}>
+                            {article.title}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>No articles have been added yet.</p>
+        )
+    }
+</BaseLayout>
+```
+
+Notice that the `<BaseLayout />` component passes the page title into the page layout to render in the title:
+
+```astro
+<BaseLayout title="Articles"> ... </BaseLayout>
+```
+
+## Components
+All components should be placed inside of the `components/` folder and each component file should have the file extension of: `.astro`.
