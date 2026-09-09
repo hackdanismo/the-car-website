@@ -1,5 +1,5 @@
 ---
-import Navigation from "./../components/Navigation.astro";
+import Header from "./../components/Header.astro";
 import Footer from "./../components/Footer.astro";
 
 // Set the title prop when passed into the layout from the page
@@ -20,7 +20,7 @@ const pageTitle = title
         <title>{pageTitle}</title>
     </head>
     <body>
-        <Navigation />
+        <Header />
 
         <main>
             <slot />
