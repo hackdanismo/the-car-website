@@ -6,29 +6,79 @@ const news = await sanityClient.fetch(`
     // Sort the newest news stories first and returns only the first three
     | order(_createdAt desc)[0...3] {
         _id,
+        _createdAt,
         title,
         "slug": slug.current
     }
 `);
 ---
 
-<section>
-    <div class="container">
-        <h2>Latest News</h2>
-
+<section class="py-16">
+    <div class="container mx-auto px-6">
         {
             news.length > 0 ? (
-                <ul>
-                    {news.map((news) => (
-                        <li>
-                            <a href={`/news/${news.slug}`}>
-                                {news.title}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                <div class="grid gap-10 lg:grid-cols-[180px_1fr]">
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <p class="mb-4 text-xs uppercase tracking-[0.2em] text-gray-500">
+                                Stay informed
+                            </p>
 
-                <a href="/news">Read all the latest news</a>
+                            <h2 class="text-4xl font-semibold leading-none">
+                                Latest
+                                <br />
+                                News
+                            </h2>
+                        </div>
+
+                        <a
+                            href="/news"
+                            class="mt-8 inline-flex items-center gap-3 text-sm font-medium"
+                        >
+                            <span class="border-b border-current pb-1">
+                                View all news
+                            </span>
+
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+
+                    <div class="grid gap-6 md:grid-cols-3">
+                        {news.map((item) => (
+                            <a
+                                href={`/news/${item.slug}`}
+                                class="group block"
+                            >
+                                <article>
+                                    <div class="mb-4 aspect-[16/9] overflow-hidden bg-gray-200">
+                                        <div class="h-full w-full bg-gray-300 transition duration-300 group-hover:scale-105" />
+                                    </div>
+
+                                    <time
+                                        datetime={item._createdAt}
+                                        class="text-xs uppercase tracking-wide text-gray-500"
+                                    >
+                                        {new Date(item._createdAt).toLocaleDateString("en-GB", {
+                                            day: "numeric",
+                                            month: "short",
+                                            year: "numeric",
+                                        })}
+                                    </time>
+
+                                    <h3 class="mt-2 text-xl font-semibold leading-tight">
+                                        {item.title}
+                                    </h3>
+
+                                    <p class="mt-3 text-sm leading-6 text-gray-600">
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Sed do eiusmod tempor
+                                        incididunt ut labore.
+                                    </p>
+                                </article>
+                            </a>
+                        ))}
+                    </div>
+                </div>
             ) : (
                 <p>No news articles have been added yet.</p>
             )
