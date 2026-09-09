@@ -13,23 +13,25 @@ const articles = await sanityClient.fetch(`
 ---
 
 <section>
-    <h2>Articles</h2>
+    <div class="container">
+        <h2>Articles</h2>
 
-    {
-        articles.length > 0 ? (
-            <ul>
-                {articles.map((article) => (
-                    <li>
-                        <a href={`/articles/${article.slug}`}>
-                            {article.title}
-                        </a>
-                    </li>
-                ))}
-            </ul>
+        {
+            articles.length > 0 ? (
+                <ul>
+                    {articles.map((article) => (
+                        <li>
+                            <a href={`/articles/${article.slug}`}>
+                                {article.title}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
 
-            <a href="/articles">Read all articles</a>
-        ) : (
-            <p>No articles have been added yet.</p>
-        )
-    }
+                <a href="/articles">Read all articles</a>
+            ) : (
+                <p>No articles have been added yet.</p>
+            )
+        }
+    </div>
 </section>

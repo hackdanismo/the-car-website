@@ -566,3 +566,85 @@ Notice that the `<BaseLayout />` component passes the page title into the page l
 
 ## Components
 All components should be placed inside of the `components/` folder and each component file should have the file extension of: `.astro`.
+
+## Styling
+We will be using `Tailwind CSS` for adding styling to our pages. From the `Astro` project root, run:
+
+```shell
+$ npx astro add tailwind
+```
+
+`Astro` will install and configure the `Tailwind Vite` plugin. This is the recommended setup. Our `astro.config.mjs` file will look like this:
+
+```mjs
+// @ts-check
+import { defineConfig } from 'astro/config';
+import { loadEnv } from "vite";
+import sanity from '@sanity/astro';
+import react from '@astrojs/react';
+
+import tailwindcss from "@tailwindcss/vite";
+
+const {
+    PUBLIC_SANITY_PROJECT_ID,
+    PUBLIC_SANITY_DATASET,
+} = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
+
+// https://astro.build/config
+export default defineConfig({
+  integrations: [
+      sanity({
+          projectId: PUBLIC_SANITY_PROJECT_ID,
+          dataset: PUBLIC_SANITY_DATASET,
+          useCdn: false,
+          studioBasePath: "/studio",
+      }), 
+      react()
+  ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+A `global.css` stylesheet will now be generated within a `src/styles` directory.
+
+```
+src/
+  styles/
+    global.css
+```
+
+The `global.css` stylesheet can then be imported into the layout file of `src/layouts/BaseLayout.astro` so Tailwind CSS is available across the whole site.
+
+```astro
+---
+import "../styles/global.css";
+
+import Header from "./../components/Header.astro";
+import Footer from "./../components/Footer.astro";
+
+// Set the title prop when passed into the layout from the page
+const { title } = Astro.props;
+
+// Render the page title and use ternary to add title to the default if passed as prop value
+const pageTitle = title
+    ? `The Car Website - ${title}`
+    : "The Car Website";
+---
+```
+
+`Tailwind CSS` includes a built-in CSS reset called `Preflight`.
+
+```css
+@import "tailwindcss";
+```
+
+### Adding a Custom CSS Stylesheet
+Custom CSS code can either be added to the `global.css` stylesheet or can be added to separate CSS stylesheets and imported in. For example, creating a stylesheet named `src/styles/layout.css` and importing it into `src/styles/global.css` would look like this:
+
+```css
+@import "tailwindcss";
+@import "./layout.css";
+```

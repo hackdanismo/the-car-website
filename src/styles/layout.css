@@ -1,0 +1,12 @@
+.container {
+    /*
+    * Allows the container to shrink naturally on small screens and remain responsive.
+    * 100% - 2rem: keeps 1rem of space on each side of the container for smaller screen sizes.
+    * The value of 1240px prevents the container from becoming too wide on large screens, it is the max-width.
+    * min(...): selects the smaller of the two values.
+    * This approach avoids needing separate padding on the container and keeps the gutter consistent.
+    */
+    width: min(100% - 2rem, 1240px);
+    /* Center align the container horizontally. */
+    margin-inline: auto;
+}

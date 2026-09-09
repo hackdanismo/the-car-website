@@ -13,23 +13,25 @@ const news = await sanityClient.fetch(`
 ---
 
 <section>
-    <h2>Latest News</h2>
+    <div class="container">
+        <h2>Latest News</h2>
 
-    {
-        news.length > 0 ? (
-            <ul>
-                {news.map((news) => (
-                    <li>
-                        <a href={`/news/${news.slug}`}>
-                            {news.title}
-                        </a>
-                    </li>
-                ))}
-            </ul>
+        {
+            news.length > 0 ? (
+                <ul>
+                    {news.map((news) => (
+                        <li>
+                            <a href={`/news/${news.slug}`}>
+                                {news.title}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
 
-            <a href="/news">Read all the latest news</a>
-        ) : (
-            <p>No news articles have been added yet.</p>
-        )
-    }
+                <a href="/news">Read all the latest news</a>
+            ) : (
+                <p>No news articles have been added yet.</p>
+            )
+        }
+    </div>
 </section>
